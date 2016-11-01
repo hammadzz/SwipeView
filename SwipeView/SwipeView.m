@@ -805,6 +805,12 @@
         CGPoint contentOffset = _vertical? CGPointMake(0.0f, [self clampedOffset:scrollOffset] * _itemSize.height): CGPointMake([self clampedOffset:scrollOffset] * _itemSize.width, 0.0f);
         [self setContentOffsetWithoutEvent:contentOffset];
         [self didScroll];
+        
+        // modify scroll offset if swipeView is scrolled to the last item
+        CGFloat diff = self.scrollView.contentSize.width - contentOffset.x;
+        if (diff < self.itemSize.width) {
+            _scrollView.contentOffset = CGPointMake(_scrollView.contentOffset.x - (self.itemSize.width-diff), _scrollView.contentOffset.y);
+        }
     }
 }
 
